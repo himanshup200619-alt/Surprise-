@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Forever Etika & Yash</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff85a1;
+            --accent: #fff0f3;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0a0a0a; /* Dark background makes colors pop */
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Moving Gradient Background */
+        .bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #4a0e0e 0%, #000 100%);
+            z-index: -1;
+        }
+
+        /* The Main Glowing Card */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 40px 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.3);
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+        }
+
+        /* Animated Rainbow Border */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ff4d6d, #ff85a1, #f72585, #ff4d6d);
+            background-size: 400%;
+            z-index: -1;
+            border-radius: 32px;
+            animation: moveGradient 5s linear infinite;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .names {
+            font-family: 'Georgia', serif;
+            font-size: 2.2rem;
+            color: white;
+            text-shadow: 0 0 10px #ff4d6d;
+            margin-bottom: 5px;
+        }
+
+        .and {
+            color: #ff85a1;
+            font-size: 1.5rem;
+            margin: 5px 0;
+        }
+
+        /* The Typing Text Effect */
+        #typing-text {
+            font-size: 1.1rem;
+            color: #ffccd5;
+            min-height: 80px;
+            margin: 20px 0;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .heart-main {
+            font-size: 50px;
+            display: block;
+            margin: 10px auto;
+            animation: beat 0.8s infinite alternate;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); filter: drop-shadow(0 0 15px #ff4d6d); }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: rise 5s ease-in forwards;
+        }
+
+        @keyframes rise {
+            from { transform: translateY(0) scale(1); opacity: 1; }
+            to { transform: translateY(-300px) scale(0); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg"></div>
+
+    <div class="container">
+        <div class="card">
+            <div class="names">Etika Didi</div>
+            <div class="and">&</div>
+            <div class="names">Yash Jiju</div>
+            
+            <div class="heart-main">❤️</div>
+
+            <div id="typing-text"></div>
+
+            <div style="color:white; font-size: 0.8rem; opacity: 0.6; margin-top: 20px;">
+                Tap anywhere for sparkles ✨
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const textElement = document.getElementById('typing-text');
+        const message = "Wishing you both a lifetime of love and happiness. May your bond grow stronger every single day. You two are truly made for each other! 🥂✨";
+        let index = 0;
+
+        // Function to type text like a chat
+        function typeMessage() {
+            if (index < message.length) {
+                textElement.innerHTML += message.charAt(index);
+                index++;
+                setTimeout(typeMessage, 70); // Adjust speed here
+            }
+        }
+
+        // Start typing on load
+        window.onload = () => {
+            setTimeout(typeMessage, 1000);
+        };
+
+        // Tap for Sparkles / Heart Effect
+        document.addEventListener('touchstart', (e) => {
+            for(let i=0; i<5; i++) {
+                createParticle(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        function createParticle(x, y) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 20 + 10;
+            p.style.left = x + 'px';
+            p.style.top = y + 'px';
+            p.style.fontSize = size + 'px';
+            p.innerHTML = ['✨', '💖', '🌸', '❤️'][Math.floor(Math.random() * 4)];
+            
+            // Random direction
+            const destinationX = (Math.random() - 0.5) * 200;
+            const destinationY = -Math.random() * 200;
+            
+            p.animate([
+                { transform: 'translate(0, 0)', opacity: 1 },
+                { transform: `translate(${destinationX}px, ${destinationY}px)`, opacity: 0 }
+            ], {
+                duration: 2000,
+                easing: 'ease-out'
+            }).onfinish = () => p.remove();
+
+            document.body.appendChild(p);
+        }
+
+        // Auto-floating hearts in background
+        setInterval(() => {
+            createParticle(Math.random() * window.innerWidth, window.innerHeight + 50);
+        }, 600);
+    </script>
+</body>
+</html>
